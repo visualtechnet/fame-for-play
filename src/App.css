@@ -1,3 +1,6 @@
+body {
+  font-family: Roboto;
+}
 .App {
   text-align: center;
 }
@@ -26,6 +29,23 @@
 
 .App-link {
   color: #61dafb;
+}
+
+ul {
+  list-style: none;
+}
+
+blockquote {
+  font-style: italic;
+  quotes: "“" "”" "‘" "’";
+}
+
+blockquote::before {
+  content: open-quote;
+}
+
+blockquote::after {
+  content: close-quote;
 }
 
 @keyframes App-logo-spin {

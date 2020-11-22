@@ -1,43 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import { Button, TextField } from '@material-ui/core'
 import './App.css';
+import Tweet from './components/Tweet'
+
 
 const searchTweetTerm = (searchTerm) => {
-  const { REACT_APP_APIURL, REACT_APP_APIBEARER, REACT_APP_MAXRESULT } = process.env
-  const fullUrl = `${REACT_APP_APIURL}/1.1/search/tweets.json?q="${searchTerm}"&result_type=popular&count=${REACT_APP_MAXRESULT}`
+  const { REACT_APP_APIURL } = process.env
+  const fullUrl = `${REACT_APP_APIURL}/${searchTerm}`
 
-  return fetch(fullUrl, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `bearer ${REACT_APP_APIBEARER}`
-    }
-  }).then(d => d.json())
+  return fetch(fullUrl).then(d => d.json())
 }
 
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
+  const [tweets, setTweets] = useState([])
 
   const onHandleSearchTerm = (e) => {    
     setSearchTerm(e.target.value)
   }
 
   const onSearchTweet = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();    
     if(searchTerm.length > 0) {
       //invoke api
-      const tweetResult = await searchTweetTerm(searchTerm).then((result) => result)
-      console.log(tweetResult)
+      const tweetResults = await searchTweetTerm(searchTerm)
+      setTweets(tweetResults && tweetResults.statuses)
+      console.log(JSON.stringify(tweetResults))
     }
-
-    e.preventDefault();
 
     return false;
   }
-
-  useEffect(() => {
-    
-  })
 
   return (
     <div className="App">      
@@ -48,8 +42,10 @@ function App() {
         <br /><br />
         <Button color="primary" onClick={onSearchTweet} variant="contained">SEARCH</Button>
       </form>
-      <hr />    
-      <p>{searchTerm }</p>
+      <hr />
+      {
+        tweets && tweets.length > 0 && (<Tweet tweets={tweets} />)
+      } 
     </div>
   );
 }
