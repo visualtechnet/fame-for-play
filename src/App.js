@@ -8,12 +8,11 @@ const searchTweetTerm = (searchTerm) => {
 
   return fetch(fullUrl, {
     method: 'GET',
-    mode: 'no-cors',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `bearer ${REACT_APP_APIBEARER}`
     }
-  }).then(d => d.json())  
+  }).then(d => d.json())
 }
 
 
